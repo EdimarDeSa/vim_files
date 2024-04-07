@@ -21,13 +21,13 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " NERDTree syntax highlight
 Plug 'tpope/vim-fugitive' " Git support
 Plug 'kien/ctrlp.vim' " Fuzzy file finder
 Plug 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline-themes'
 
 " Themes and UI
 Plug 'mhinz/vim-startify' " Vim greeting screen
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' } " Theme
-Plug 'ryanoasis/vim-devicons' " Icons
 Plug 'doums/darcula'
+Plug 'ryanoasis/vim-devicons' " Icons
 
 
 Plug 'github/copilot.vim' " Copilot
@@ -85,8 +85,10 @@ set showmode           " Show mode
 set backspace=2        " Delete everything with backspace
 set cindent            " C style indenting
 set autoindent         " Copy indent from current line
-"set guifont=CousineNerdFont-Regular:h14 " Set the font
+set guifont=CousineNerdFont-Regular:h14 " Set the font
 set cursorline
+set relativenumber
+set inccommand=split
 
 filetype on          " Detect and	set the filetype option and trigger the FileType Event
 filetype plugin on   " Load the plugin file for the file type, if any
@@ -130,11 +132,11 @@ set listchars+=precedes:<
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
+
+set termguicolors
 endif
 
 colorscheme darcula
-let g:airline_theme=darcula
 
 " -------------------------------------------------------------------------------------------------
 " NERDTree configuration
@@ -158,16 +160,34 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%')
       \!~ 'NERD_tree_\d\+' && winnr('$') > 1 | let buf=bufnr() | buffer# |
       \execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+let g:NERDTreeFileLines = 1
+let NERDTreeShowHidden=1
 
-" Changing default arrows
-"let g:NERDTreeDirArrowExpandable = '?'
-"let g:NERDTreeDirArrowCollapsible = '?'
+
+
+
+
 
 " -------------------------------------------------------------------------------------------------
 "  Airline configuration
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_detect_modified = 1
+let g:airline_detect_spell = 1
+let g:airline_detect_spelllang = 1
+let g:airline_theme='google_dark'
+let g:airline_filetype_overrides = {
+      \ 'coc-explorer':  [ 'CoC Explorer', '' ],
+      \ 'fugitive': ['fugitive', '%{airline#util#wrap(airline#extensions#branch#get_head(),80)}'],
+      \ 'help':  [ 'Help', '%f' ],
+      \ 'nerdtree': [ get(g:, 'NERDTreeStatusline', 'NERD'), '' ],
+      \ 'startify': [ 'startify', '' ],
+      \ 'vim-plug': [ 'Plugins', '' ],
+      \ 'vimfiler': [ 'vimfiler', '%{vimfiler#get_status_string()}' ],
+      \ 'vimshell': ['vimshell','%{vimshell#get_status_string()}'],
+      \ }
+
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#show_line_numbers = 1
+let g:airline_powerline_fonts = 1
 
 " -------------------------------------------------------------------------------------------------
 " CtrlP
@@ -202,16 +222,16 @@ let g:ale_python_isort_options = '--profile black -l 80'
 
 " -------------------------------------------------------------------------------------------------
 "  Syntastic configuration
-let g:syntastic_python_checkers = ['flake8', 'pyright', 'bandit']
-let g:syntastic_aggregate_errors = 1
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"let g:syntastic_python_checkers = ['flake8', 'pyright', 'bandit']
+"let g:syntastic_aggregate_errors = 1
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
 
 " -------------------------------------------------------------------------------------------------
 " Rainbow
@@ -273,7 +293,12 @@ au BufRead, BufNewFile *.py, *.pyw, *.c, *.h match BadWhitespace/\s\+$/
 
 " -------------------------------------------------------------------------------------------------
 " Remaps
+
+let mapleader = "\<Space>"
+noremap <leader>sv :source %<CR>
+
 nnoremap op o<Esc>k
+
 nnoremap oi O<Esc>j
 nnoremap oo A<CR>
 
