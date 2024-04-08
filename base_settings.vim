@@ -88,3 +88,9 @@ set listchars+=extends:>
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
 set listchars+=precedes:<
+
+augroup dynamic_smartcase
+  autocmd!
+  autocmd CmdLineEnter : set nosmartcase
+  autocmd CmdLineLeave : set smartcase
+augroup END

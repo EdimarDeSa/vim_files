@@ -1,4 +1,4 @@
-set nocp
+set nocompatible
 set exrc
 filetype off
 
@@ -6,6 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 " Linters and fixers
 Plug 'dense-analysis/ale' " Linter
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Language server
 Plug 'sheerun/vim-polyglot' " Syntax highlight
 Plug 'jiangmiao/auto-pairs' " Auto pairs
 Plug 'vim-scripts/indentpython.vim' " Python indent
@@ -13,13 +14,6 @@ Plug 'tmhedberg/SimpylFold' " Python folding
 Plug 'rust-lang/rust.vim' " Rust support
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-surround' " Surround
-
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
 
 " Navigation and search
 Plug 'preservim/nerdtree' " File explorer tree
@@ -37,8 +31,7 @@ Plug 'ryanoasis/vim-devicons' " Icons
 Plug 'luochen1990/rainbow' " Rainbow parentheses
 
 " Snippets and autocomplete
-"Plug 'SirVer/ultisnips' " Snippets
-"Plug 'honza/vim-snippets'
+
 Plug 'github/copilot.vim' " Copilot
 
 call plug#end()
@@ -47,12 +40,19 @@ call plug#end()
 "  General configuration
 source ~/.config/nvim/base_settings.vim
 
-" -------------------------------------------------------------------------------------------------
-set completeopt=menu,menuone,noselect
-source ~/.config/nvim/setup_cmp.lua
+if has('gui_running')
+  set ts=2 sw=2 et
+  set guioptions=egmrt
+endif
+
+" Always show the signcolumn, so our buffers doesn't shift on errors
+autocmd BufRead,BufNewFile * setlocal signcolumn=yes
+autocmd FileType nerdtree setlocal signcolumn=no
+
 
 " -------------------------------------------------------------------------------------------------
 " Theme configuration
+
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum]"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum]"
@@ -114,15 +114,17 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 let g:ctrlp_use_caching = 0
 
 " -------------------------------------------------------------------------------------------------
-" Ale
+"g Ale
 let g:airline#extensions#ale#enabled = 1
 let g:ale_fixers = {
       \'*': ['remove_trailing_lines', 'trim_whitespace', 'add_blank_lines_for_python_control_statements'],
       \'python': ['black', 'isort', 'autoimport'],
+      \'rust': ['rustfmt'],
       \}
 
 let g:ale_linters = {
       \'python': ['flake8', 'bandit', 'pyright'],
+      \'rust': ['rust-analyzer'],
       \}
 
 let g:ale_linters_ignore = {
@@ -136,6 +138,12 @@ let g:ale_lint_on_text_changed = 'never' " Lint only when saving
 let g:ale_lint_on_insert_leave = 0 " Lint only when saving
 let g:ale_lint_on_enter = 0 " Lint only when saving
 let g:ale_python_auto_poetry = 1
+let g:ale_completion_enabled = 1
+let g:ale_set_highlights = 0
+let g:ale_set_signs = 1
+
+imap <C-Space> <Plug>(ale_complete)
+nnoremap <silent> <Plug>(<CR>) :ALEFindReferences -relative<Return>
 
 " Python ALE options
 let g:ale_python_flake8_options =
@@ -173,12 +181,21 @@ au FileType yaml if bufname("%") =~# "docker-compose.yml" |	set ft=yaml.docker-c
 au FileType yaml if bufname("%") =~# "compose.yml" |	set ft=yaml.docker-compose | endif
 
 let g:coc_filetype_map = { 'yaml.docker-compose': 'dockercompose', }
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 let g:LanguageClient_serverCommands = { 'sql': ['sql-language-server', 'up', '--method', 'stdio'], }
+
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 " -------------------------------------------------------------------------------------------------
 "  SimpylFold
@@ -212,18 +229,13 @@ let g:copilot_no_tab_map = v:true
 
 let mapleader = "\<Space>"
 noremap <leader>sv :source %<CR>
-
-nnoremap op o<Esc>k
-
-nnoremap oi O<Esc>j
-nnoremap oo A<CR>
+noremap <leader>cs :nohls<CR>
+noremap <leader>q :q<CR>
+nnoremap <leader><CR> o<Esc>a
+nnoremap <leader><s-CR> O<Esc>a
 
 " Cria tab
 nnoremap te :tabe<CR>
-
-" navegação no buffer
-nnoremap ty :bn<CR>
-nnoremap tr :bp<CR>
 
 " Deleta buffer
 nnoremap td :bd<CR>
@@ -235,30 +247,36 @@ nnoremap tv :vsplit<CR>
 " Deleta split
 nnoremap tt :q<CR>
 
-" Call command
-nnoremap tc :!
-
 " Realiza o folding
-nnoremap <space> za
+nnoremap <Space>- zc<CR>
+nnoremap <Space>= zo<CR>
 
 " Ctrl padrão para saidas
 map <C-c> "+y
 map <C-v> "+p
 map <C-d> yyp
 vmap <C-d> yp
-nnoremap <C-A-r> :%s/
+map <C-x> dd
+
+" Atalhos de busca e substituição
+noremap <leader>f \<ESC>/
+noremap <leader>r :s/\<<C-r><C-w>\>//<left>
+noremap <leader><s-r> :%s/\<<C-r><C-w>\>//g<left><left>
+
 " Key mappings for split navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-" Abre o terminal
-map <s-t> :split \| terminal<CR>
-map <C-s> :w<CR>
 
+" Abre o termina
+nmap <Space>t :vsplit \| terminal<CR>
+nmap <C-s> :w<CR>
+imap <C-s> <Esc>:w<CR>a
 
 " -------------------------------------------------------------------------------------------------
 " Hilight de palavra em cursor
+
 function! HighlightWordUnderCursor()
   if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
     exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
@@ -266,4 +284,6 @@ function! HighlightWordUnderCursor()
     call clearmatches()
   endif
 endfunction
-autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
+
+" Mapeamento de teclas para chamar a função
+autocmd CursorHold * call HighlightWordUnderCursor()

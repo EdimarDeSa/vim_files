@@ -15,7 +15,7 @@
         "command": "docker-compose-langserver",
         "args": ["--stdio"],
         "filetypes": ["dockercompose"],
-        "rootPatterns": [".git", ".env", "docker-compose.yml", "compose.yml"]
+        "rootPatterns": ["docker-compose.yml", "compose.yml", "docker-compose.yaml", "compose.yaml"]
     },
     "rust": {
       "command": "rust-analyzer",
