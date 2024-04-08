@@ -274,6 +274,16 @@ nmap <Space>t :vsplit \| terminal<CR>
 nmap <C-s> :w<CR>
 imap <C-s> <Esc>:w<CR>a
 
+" Git shortcuts
+nnoremap <leader>gs :Git status<CR>
+nnoremap <leader>gd :Git diff<CR>
+nnoremap <leader>gc :Git commit -m""<left>
+nnoremap <leader>gp :Git push<CR>
+nnoremap <leader>ga :Git add %<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gl :Git log<CR>
+nnoremap <leader>gr :Git restore<CR>
+
 " -------------------------------------------------------------------------------------------------
 " Hilight de palavra em cursor
 
