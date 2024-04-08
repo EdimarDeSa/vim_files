@@ -6,7 +6,6 @@ call plug#begin('~/.vim/plugged')
 
 " Linters and fixers
 Plug 'dense-analysis/ale' " Linter
-"Plug 'vim-syntastic/syntastic' " Syntax checker
 Plug 'sheerun/vim-polyglot' " Syntax highlight
 Plug 'jiangmiao/auto-pairs' " Auto pairs
 Plug 'vim-scripts/indentpython.vim' " Python indent
@@ -38,8 +37,8 @@ Plug 'ryanoasis/vim-devicons' " Icons
 Plug 'luochen1990/rainbow' " Rainbow parentheses
 
 " Snippets and autocomplete
-Plug 'SirVer/ultisnips' " Snippets
-Plug 'honza/vim-snippets'
+"Plug 'SirVer/ultisnips' " Snippets
+"Plug 'honza/vim-snippets'
 Plug 'github/copilot.vim' " Copilot
 
 call plug#end()
@@ -118,11 +117,16 @@ let g:ctrlp_use_caching = 0
 " Ale
 let g:airline#extensions#ale#enabled = 1
 let g:ale_fixers = {
-      \'*': ['remove_trailing_lines', 'trim_whitespace'],
-      \   'python': ['isort', 'black',],
+      \'*': ['remove_trailing_lines', 'trim_whitespace', 'add_blank_lines_for_python_control_statements'],
+      \'python': ['black', 'isort', 'autoimport'],
       \}
+
 let g:ale_linters = {
-      \   'python': ['flake8', 'pyright', 'bandit'],
+      \'python': ['flake8', 'bandit', 'pyright'],
+      \}
+
+let g:ale_linters_ignore = {
+      \   'python': ['ruff'],
       \}
 
 let g:ale_fix_on_save = 1
@@ -131,25 +135,13 @@ let g:ale_use_neovim_diagnostics_api = 1
 let g:ale_lint_on_text_changed = 'never' " Lint only when saving
 let g:ale_lint_on_insert_leave = 0 " Lint only when saving
 let g:ale_lint_on_enter = 0 " Lint only when saving
+let g:ale_python_auto_poetry = 1
 
 " Python ALE options
 let g:ale_python_flake8_options =
       \'--max-line-length=80 --extend-ignore=E203 --python=$(poetry env info -p)/bin/python'
 let g:ale_python_black_options = '--line-length 80'
 let g:ale_python_isort_options = '--profile black -l 80'
-
-" -------------------------------------------------------------------------------------------------
-"  Syntastic configuration
-"let g:syntastic_python_checkers = ['flake8', 'pyright', 'bandit']
-"let g:syntastic_aggregate_errors = 1
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
 
 " -------------------------------------------------------------------------------------------------
 " Rainbow
@@ -197,7 +189,7 @@ let g:simpylfold_fold_python_files = 1
 " Rust
 autocmd FileType rust silent! nnoremap <silent> <Leader>f :RustFmt<CR>
 
-" ____________________________________________
+" -------------------------------------------------------------------------------------------------
 " Python
 au BufNewFile, BufRead *.py
       \	set tabstop=4
@@ -206,6 +198,7 @@ au BufNewFile, BufRead *.py
       \	set textwidth=79
       \	set fileformat=unix
 let python_highlight_all=1
+let g:python3_host_prog = '/usr/bin/python3'
 
 au BufRead, BufNewFile *.py, *.pyw, *.c, *.h match BadWhitespace/\s\+$/
 
