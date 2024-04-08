@@ -17,16 +17,15 @@ Plug 'tpope/vim-surround' " Surround
 Plug 'tpope/vim-commentary' " Comment
 
 " Navigation and search
-"Plug 'preservim/nerdtree' " File explorer tree
 Plug 'nvim-neo-tree/neo-tree.nvim' " File explorer tree
-"Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " NERDTree syntax highlight
+Plug 'nvim-lua/plenary.nvim' " Dependência do Neotree
+Plug 'nvim-tree/nvim-web-devicons' " Dependência do Neotree
+Plug 'MunifTanjim/nui.nvim' " Dependência do Neotree
 Plug 'kien/ctrlp.vim' " Fuzzy file finder
 
 " Git tools
 " Plug 'airblade/vim-gitgutter' " Git diff
 Plug 'tpope/vim-fugitive' " Git support
-"Plug 'Xuyuanp/nerdtree-git-plugin' " Git support for NERDTree
-
 
 " Docker tools
 Plug 'kkvh/vim-docker-tools'
@@ -71,7 +70,7 @@ colorscheme darcula
 
 " -------------------------------------------------------------------------------------------------
 " NERDTree configuration
-nmap <C-a> :NERDTreeToggle<CR>
+nmap <C-a> :Neotree toggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
 " Start NERDTree. If a file is specified, move the cursor to its window.
