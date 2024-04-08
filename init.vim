@@ -14,24 +14,32 @@ Plug 'tmhedberg/SimpylFold' " Python folding
 Plug 'rust-lang/rust.vim' " Rust support
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-surround' " Surround
+Plug 'tpope/vim-commentary' " Comment
 
 " Navigation and search
-Plug 'preservim/nerdtree' " File explorer tree
-Plug 'Xuyuanp/nerdtree-git-plugin' " Git support for NERDTree
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " NERDTree syntax highlight
-Plug 'tpope/vim-fugitive' " Git support
+"Plug 'preservim/nerdtree' " File explorer tree
+Plug 'nvim-neo-tree/neo-tree.nvim' " File explorer tree
+"Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " NERDTree syntax highlight
 Plug 'kien/ctrlp.vim' " Fuzzy file finder
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+
+" Git tools
+" Plug 'airblade/vim-gitgutter' " Git diff
+Plug 'tpope/vim-fugitive' " Git support
+"Plug 'Xuyuanp/nerdtree-git-plugin' " Git support for NERDTree
+
+
+" Docker tools
+Plug 'kkvh/vim-docker-tools'
+Plug 'ekalinin/Dockerfile.vim' " Dockerfile syntax
 
 " Themes and UI
+Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify' " Vim greeting screen
 Plug 'doums/darcula' " Theme
-Plug 'ryanoasis/vim-devicons' " Icons
 Plug 'luochen1990/rainbow' " Rainbow parentheses
+Plug 'vim-airline/vim-airline-themes'
 
 " Snippets and autocomplete
-
 Plug 'github/copilot.vim' " Copilot
 
 call plug#end()
