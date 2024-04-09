@@ -74,23 +74,9 @@ nmap <C-a> :Neotree toggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
 " Start NERDTree. If a file is specified, move the cursor to its window.
-autocmd VimEnter * if argc() > 0 || exists("s:std_in") | NERDTree | wincmd p | endif
+autocmd VimEnter * if argc() > 0 || exists("s:std_in") | execute 'Neotree toggle dir=%:p:h' | wincmd p | endif
 
-" Start NERDTree when Vim starts with a directory argument.
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-      \ execute 'NERDTreeToggle' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
-
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
-      \ | quit | endif
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%')
-      \!~ 'NERD_tree_\d\+' && winnr('$') > 1 | let buf=bufnr() | buffer# |
-      \execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
-let g:NERDTreeFileLines = 1
-
+source ~/.config/nvim/setup_neotree.lua
 " -------------------------------------------------------------------------------------------------
 "  Airline configuration
 let g:airline_theme='google_dark'
