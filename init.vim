@@ -2,7 +2,7 @@ set nocompatible
 set exrc
 filetype off
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " Linters and fixers
 Plug 'dense-analysis/ale' " Linter
@@ -24,7 +24,7 @@ Plug 'MunifTanjim/nui.nvim' " Dependência do Neotree
 Plug 'kien/ctrlp.vim' " Fuzzy file finder
 
 " Git tools
-" Plug 'airblade/vim-gitgutter' " Git diff
+Plug 'airblade/vim-gitgutter' " Git diff
 Plug 'tpope/vim-fugitive' " Git support
 
 " Docker tools
@@ -33,6 +33,7 @@ Plug 'ekalinin/Dockerfile.vim' " Dockerfile syntax
 
 " Themes and UI
 Plug 'vim-airline/vim-airline'
+Plug 'willothy/nvim-cokeline' " Status line
 Plug 'mhinz/vim-startify' " Vim greeting screen
 Plug 'doums/darcula' " Theme
 Plug 'luochen1990/rainbow' " Rainbow parentheses
@@ -56,6 +57,10 @@ endif
 autocmd BufRead,BufNewFile * setlocal signcolumn=yes
 autocmd FileType nerdtree setlocal signcolumn=no
 
+" -------------------------------------------------------------------------------------------------
+" Remaps
+
+source ~/.config/nvim/remaps.vim
 
 " -------------------------------------------------------------------------------------------------
 " Theme configuration
@@ -69,14 +74,20 @@ endif
 colorscheme darcula
 
 " -------------------------------------------------------------------------------------------------
-" NERDTree configuration
+" Neotree configuration
 nmap <C-a> :Neotree toggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
 " Start NERDTree. If a file is specified, move the cursor to its window.
-autocmd VimEnter * if argc() > 0 || exists("s:std_in") | execute 'Neotree toggle dir=%:p:h' | wincmd p | endif
+autocmd VimEnter * if argc() > 0 || exists("s:std_in") | execute 'Neotree toggle dir=%:p:h' |
+                  \wincmd p | endif
 
 source ~/.config/nvim/setup_neotree.lua
+
+" -------------------------------------------------------------------------------------------------
+"  CokeLine configuration
+source ~/.config/nvim/setup_cokeline.lua
+
 " -------------------------------------------------------------------------------------------------
 "  Airline configuration
 let g:airline_theme='google_dark'
@@ -216,66 +227,6 @@ au BufRead, BufNewFile *.py, *.pyw, *.c, *.h match BadWhitespace/\s\+$/
 "  Copilot
 imap <silent><script><expr> <C-j> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
-
-" -------------------------------------------------------------------------------------------------
-" Remaps
-
-let mapleader = "\<Space>"
-noremap <leader>sv :source %<CR>
-noremap <leader>cs :nohls<CR>
-noremap <leader>q :q<CR>
-nnoremap <leader><CR> o<Esc>a
-nnoremap <leader><s-CR> O<Esc>a
-
-" Cria tab
-nnoremap te :tabe<CR>
-
-" Deleta buffer
-nnoremap td :bd<CR>
-
-" Criação de splits
-nnoremap th :split<CR>
-nnoremap tv :vsplit<CR>
-
-" Deleta split
-nnoremap tt :q<CR>
-
-" Realiza o folding
-nnoremap <Space>- zc<CR>
-nnoremap <Space>= zo<CR>
-
-" Ctrl padrão para saidas
-map <C-c> "+y
-map <C-v> "+p
-map <C-d> yyp
-vmap <C-d> yp
-map <C-x> dd
-
-" Atalhos de busca e substituição
-noremap <leader>f \<ESC>/
-noremap <leader>r :s/\<<C-r><C-w>\>//<left>
-noremap <leader><s-r> :%s/\<<C-r><C-w>\>//g<left><left>
-
-" Key mappings for split navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
-" Abre o termina
-nmap <Space>t :vsplit \| terminal<CR>
-nmap <C-s> :w<CR>
-imap <C-s> <Esc>:w<CR>a
-
-" Git shortcuts
-nnoremap <leader>gs :Git status<CR>
-nnoremap <leader>gd :Git diff<CR>
-nnoremap <leader>gc :Git commit -m""<left>
-nnoremap <leader>gp :Git push<CR>
-nnoremap <leader>ga :Git add %<CR>
-nnoremap <leader>gb :Git blame<CR>
-nnoremap <leader>gl :Git log<CR>
-nnoremap <leader>gr :Git restore<CR>
 
 " -------------------------------------------------------------------------------------------------
 " Hilight de palavra em cursor
