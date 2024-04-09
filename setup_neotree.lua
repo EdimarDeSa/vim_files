@@ -85,7 +85,7 @@ require("neo-tree").setup({
         commands = {},
         window = {
           position = "left",
-          width = 40,
+          width = 30,
           mapping_options = {
             noremap = true,
             nowait = true,
@@ -148,11 +148,14 @@ require("neo-tree").setup({
         filesystem = {
           filtered_items = {
             visible = false, -- when true, they will just be displayed differently than normal items
-            hide_dotfiles = true,
-            hide_gitignored = true,
+            hide_dotfiles = false,
+            hide_gitignored = false,
             hide_hidden = true, -- only works on Windows for hidden files/directories
             hide_by_name = {
               --"node_modules"
+              ".git",
+              ".vscode",
+              ".idea",
             },
             hide_by_pattern = { -- uses glob style patterns
               --"*.meta",
