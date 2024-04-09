@@ -16,7 +16,7 @@ set scrolloff=2      " Minimum number of lines to keep above and below the curso
 set colorcolumn=100  " Draws a line at the given line to keep aware of the line size
 set cmdheight=2      " Give more space for displaying messages
 set updatetime=60   " Time in miliseconds to consider the changes
-set encoding=utf-8   " The encoding should be utf-8 to activate the font icons
+set encoding=UTF-8   " The encoding should be utf-8 to activate the font icons
 set nobackup         " No backup files
 set showmatch        " Show matching brackets
 set matchtime=2      " How many tenths of a second to blink
@@ -48,7 +48,6 @@ set showmode           " Show mode
 set backspace=2        " Delete everything with backspace
 set cindent            " C style indenting
 set autoindent         " Copy indent from current line
-"set guifont=CousineNerdFont-Regular:h14 " Set the font
 set cursorline
 set inccommand=split
 
