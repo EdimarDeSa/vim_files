@@ -5,7 +5,7 @@ filetype off
 call plug#begin('~/.config/nvim/plugged')
 
 " Linters and fixers
-Plug 'dense-analysis/ale' " Linter
+"Plug 'dense-analysis/ale' " Linter
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Language server
 Plug 'sheerun/vim-polyglot' " Syntax highlight
 Plug 'jiangmiao/auto-pairs' " Auto pairs
@@ -78,7 +78,6 @@ colorscheme darcula
 nmap <C-a> :Neotree toggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
-" Start NERDTree. If a file is specified, move the cursor to its window.
 autocmd VimEnter * if argc() > 0 || exists("s:std_in") | execute 'Neotree toggle dir=%:p:h' |
                   \wincmd p | endif
 
@@ -100,7 +99,6 @@ let g:airline_detect_spelllang = 1
 let g:airline_filetype_overrides = {
       \ 'fugitive': ['fugitive', '%{airline#util#wrap(airline#extensions#branch#get_head(),80)}'],
       \ 'help':  [ 'Help', '%f' ],
-      \ 'nerdtree': [ get(g:, 'NERDTreeStatusline', 'NERD'), '' ],
       \ 'startify': [ 'startify', '' ],
       \ 'vim-plug': [ 'Plugins', '' ],
       \ 'vimfiler': [ 'vimfiler', '%{vimfiler#get_status_string()}' ],
@@ -146,7 +144,6 @@ let g:ale_completion_enabled = 1
 let g:ale_set_highlights = 0
 let g:ale_set_signs = 1
 
-imap <C-Space> <Plug>(ale_complete)
 nnoremap <silent> <Plug>(<CR>) :ALEFindReferences -relative<Return>
 
 " Python ALE options
@@ -161,45 +158,7 @@ let g:rainbow_active = 1
 
 " -------------------------------------------------------------------------------------------------
 " Coc
-let g:coc_global_extensions = [
-      \'coc-json',
-      \'coc-jedi',
-      \'coc-rls',
-      \'coc-tsserver',
-      \'coc-css',
-      \'coc-yaml',
-      \'coc-html',
-      \'coc-highlight',
-      \'coc-markdownlint',
-      \'coc-snippets',
-      \]
-
-" Configurações sugeridas pelo coc
-autocmd FileType css	setl iskeyword+=-
-
-autocmd FileType scss	setl iskeyword+=@-@
-
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-au FileType yaml if bufname("%") =~# "docker-compose.yml" |	set ft=yaml.docker-compose | endif
-au FileType yaml if bufname("%") =~# "compose.yml" |	set ft=yaml.docker-compose | endif
-
-let g:coc_filetype_map = { 'yaml.docker-compose': 'dockercompose', }
-let g:LanguageClient_serverCommands = { 'sql': ['sql-language-server', 'up', '--method', 'stdio'], }
-
-inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+source ~/.config/nvim/setup_coc.vim
 
 " -------------------------------------------------------------------------------------------------
 "  SimpylFold

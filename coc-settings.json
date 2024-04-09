@@ -9,13 +9,13 @@
     "dockerfile": {
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
-     "args": ["--stdio"]
+      "args": ["--stdio"]
     },
-      "dockercompose": {
-        "command": "docker-compose-langserver",
-        "args": ["--stdio"],
-        "filetypes": ["dockercompose"],
-        "rootPatterns": ["docker-compose.yml", "compose.yml", "docker-compose.yaml", "compose.yaml"]
+    "dockercompose": {
+      "command": "docker-compose-langserver",
+      "args": ["--stdio"],
+      "filetypes": ["dockercompose"],
+      "rootPatterns": ["docker-compose.yml", "compose.yml", "docker-compose.yaml", "compose.yaml"]
     },
     "rust": {
       "command": "rust-analyzer",
@@ -45,5 +45,6 @@
   },
   "colors.enable": true,
   "diagnostic.displayByAle": true,
-  "snippets.ultisnips.pythonPrompt": false
+  "snippets.ultisnips.pythonPrompt": false,
+  "coc.preferences.extensionUpdateCheck": "daily"
 }
